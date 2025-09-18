@@ -1,9 +1,10 @@
 import TelegramBot from "node-telegram-bot-api";
 import { calculateProgress } from "../services/calendar.js";
-import { getCurrentEthiopianYear } from "../utils/getCurrentEthiopianYear.js";
+import { generateProgressBar } from "../utils/generateProgressBar.js";
+import { getCurrentEthiopianYearAndWeek } from "../utils/getCurrentEthiopianYear.js";
 
 export function weeklyProgress(bot: TelegramBot, chatId: string): void {
-  const ethYear = getCurrentEthiopianYear();
+  const {ethYear, weekNumber} = getCurrentEthiopianYearAndWeek();
   const progress = calculateProgress(ethYear);
 
   if (!progress) {
@@ -11,9 +12,11 @@ export function weeklyProgress(bot: TelegramBot, chatId: string): void {
     return;
   }
 
-  const msg = `📅 Ethiopian Year ${ethYear} Progress
-✅ ${progress.percentDone}% Completed
-🕒 ${progress.percentLeft}% Remaining`;
+  const percentDone = parseFloat(progress.percentDone);
+  const bar = generateProgressBar(percentDone, 20);
+
+  const msg = `${ethYear} EC: Week ${weekNumber}
+${bar} ${progress.percentLeft}%`;
 
   bot.sendMessage(chatId, msg);
 }

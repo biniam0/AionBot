@@ -1,5 +1,18 @@
-export function getCurrentEthiopianYear(date: Date = new Date()): number {
+import { ethiopianYearToGregorian } from "./ECToGC.js";
+
+export function getCurrentEthiopianYearAndWeek(date: Date = new Date()): {
+  ethYear: number;
+  weekNumber: number;
+} {
   const gregYear = date.getFullYear();
   const month = date.getMonth();
-  return month < 8 ? gregYear - 8 : gregYear - 7;
+  const ethYear = month < 8 ? gregYear - 8 : gregYear - 7;
+
+  const [startDate, endDate] = ethiopianYearToGregorian(ethYear);
+  const diffMs = date.getTime() - startDate.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  const weekNumber = Math.floor(diffDays / 7) + 1;
+
+  return { ethYear, weekNumber };
 }
