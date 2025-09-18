@@ -1,10 +1,13 @@
 import cron from "node-cron";
 import { weeklyProgress } from "./handlers/progress.js";
 import { bot } from "./bot.js";
-import { CHAT_ID } from "./config.js";
+import { getSubscribedChannels } from "./utils/getSubscribedChannels.js";
 
 export function setupScheduler(): void {
   cron.schedule("* * * * *", () => {
-    weeklyProgress(bot, CHAT_ID);
+    const channels = getSubscribedChannels();
+    channels.forEach((chatId) => {
+      weeklyProgress(bot, chatId);
+    });
   });
 }

@@ -1,5 +1,7 @@
+import TelegramBot from "node-telegram-bot-api";
 import dotenv from "dotenv";
 dotenv.config();
 
-export const BOT_TOKEN: string = process.env.BOT_TOKEN || "";
-export const CHAT_ID: string = process.env.CHAT_ID || "";
+const BOT_TOKEN: string = process.env.BOT_TOKEN || "";
+
+export const bot = new TelegramBot(BOT_TOKEN, { polling: true });
