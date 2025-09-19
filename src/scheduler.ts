@@ -5,7 +5,7 @@ import { bot } from "./config.js";
 
 export function setupScheduler(): void {
   cron.schedule(
-    "*/5 * * * *", 
+    "0 18 * * 0", 
     () => {
       const channels = getSubscribedChannels();
       channels.forEach((chatId) => {
